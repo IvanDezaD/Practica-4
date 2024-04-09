@@ -15,7 +15,7 @@ error() {
   echo -e "[-] $1" &>2
 }
 
-#Recibimos el nombre de un fichero y tenemos que devolver una lista de ips
+#Recibimos el nombre de un fichero y tenemos que devolver una lista de ips leidas
 leerFicheroMaquinas() {
   echo 
 }
@@ -25,7 +25,19 @@ comprobarFichero() {
   echo 
 }
 
-#Barra de progreso
+#comprobamos que el numero de parametros de un fichero es el esperado
+#true si verdad false si falso
+checkParams() {
+  echo
+}
+
+#sube  por scp el script a la maquina de una ip dada
+#recibimos ip, devolvemos true si ha salido bien y false si no
+scpUpload() {
+  echo
+}
+
+#Barra de progreso, hay que crear index como una variable en algun lugar y no modificarla
 updateProgressBar() {
     local animation=( '>' '=' '=' '=' '=' '=' '=' '=' )
     local msg="$1"
@@ -33,18 +45,8 @@ updateProgressBar() {
     ((index = (index + 1) % 8))
 }
 
-main() {
-    index=0
-    while true; do
-        updateProgressBar "Añadiendo usuarios!"
-        sleep 0.1 # Simula algo de trabajo
-    done
-}
-
-main
-
 #Tenemos 2 opciones, llamar al script de la practica 3 desde este, cambiando y simplificando cosas
-main2() {
+main() {
   leerFicheroMaquinas
   echo "Esto es la funcion main"
 }
