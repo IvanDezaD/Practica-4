@@ -47,7 +47,6 @@ updateProgressBar() {
 
 #Tenemos 2 opciones, llamar al script de la practica 3 desde este, cambiando y simplificando cosas
 main() {
-  leerFicheroMaquinas
-  echo "Esto es la funcion main"
+  echo
 }
 
