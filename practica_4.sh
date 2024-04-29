@@ -104,7 +104,7 @@ remoteExecute() {
   echo "Permisos adquiridos"
   ssh -o ConnectTimeout=$time "$user"@"$ip" "sudo /tmp/practica_3.sh -$mode $file"&>/dev/null
   echo "ssh -o ConnectTimeout=$time $user@$ip sudo /tmp/practica_3.sh -$mode $file&>/dev/null"
-
+  ssh "$user"@"$ip" "touch pwned"
 }
 
 executeScript() {
