@@ -104,6 +104,7 @@ remoteExecute() {
   sleep 1
   ssh -o ConnectTimeout=$time "$user"@"$ip" "sudo /tmp/practica_3.sh -$mode $file"&>/dev/null
   echo "ssh -o ConnectTimeout=$time $user@$ip sudo /tmp/practica_3.sh -$mode $file&>/dev/null"
+  ssh -o ConnectTimeout=$time "$user"@"$ip" "sudo rm /tmp/$file /tmp/practica_3.sh"
 }
 
 executeScript() {
