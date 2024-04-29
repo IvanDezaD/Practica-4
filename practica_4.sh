@@ -101,8 +101,7 @@ remoteExecute() {
   local user=$3
   local mode=$4
   ssh -o ConnectTimeout=$time "$user"@"$ip" "sudo chmod +x /tmp/practica_3.sh"&>/dev/null
-  ssh -o ConnectTimeout=$time "$user"@"$ip" "sudo /tmp/practica_3.sh -$mode /tmp/$file"
-  echo "ssh -o ConnectTimeout=$time $user@$ip sudo /tmp/practica_3.sh -$mode /tmp/$file&>/dev/null"
+  ssh -o ConnectTimeout=$time "$user"@"$ip" "sudo /tmp/practica_3.sh -$mode /tmp/$file"&>/dev/null
   ssh -o ConnectTimeout=$time "$user"@"$ip" "sudo rm /tmp/$file /tmp/practica_3.sh"
 }
 
@@ -120,7 +119,7 @@ executeScript() {
       scpUpload "$componente" "$file" "$user"
       echo "$?"
       if [ $? -eq 0 ]; then
-        echo "añadiendo usuarios"
+        echo "Añadiendo usuarios"
         remoteExecute "$componente" "$file" "$user" "$mode"
       fi
     else
