@@ -115,6 +115,7 @@ executeScript() {
     local status=$(ipCheck $componente)
     if [[ $status == "true" ]]; then
       scpUpload "$componente" "$file" "$user"
+      scpUpload "$componente" "practica_3.sh" "$user"
       if [ $? -eq 1 ]; then
         remoteExecute "$componente" "$file" "$user" "$mode"
       fi
