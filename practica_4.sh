@@ -119,6 +119,7 @@ executeScript() {
       scpUpload "$componente" "$file" "$user"
       scpUpload "$componente" "practica_3.sh" "$user"
       if [ $? -eq 1 ]; then
+        echo "añadiendo usuarios"
         remoteExecute "$componente" "$file" "$user" "$mode"
       fi
     else
