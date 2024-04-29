@@ -1,5 +1,7 @@
 #!/bin/bash
 
+readonly time=4
+
 function ctrl_c() {
     echo "Saliendo abruptamente!"
     exit 1
@@ -68,13 +70,23 @@ comprobarFichero() {
   fi
 }
 
+ipCheck(){
+  local ip=$1
+  local ip_regex='^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'
+  if [[ $ip =~ $ip_regex ]]; then
+    echo "true"
+  else
+    echo "false"
+  fi
+}
+
 #sube  por scp el script a la maquina de una ip dada
 #recibimos ip, devolvemos true si ha salido bien y false si no
 scpUpload() {
   local ip=$1
   local file=$2
   local user=$3
-  scp -o ConnectTimeout=1 "$file" "$user"@"$ip":/tmp/"$file" &>/dev/null
+  scp -o ConnectTimeout=$time "$file" "$user"@"$ip":/tmp/"$file" &>/dev/null
   if [[ $? -eq 0 ]]; then
     echo "Fichero $file subido con exito a la maquina $ip" 
   else
@@ -88,15 +100,7 @@ remoteExecute() {
   local file=$2
   local user=$3
   local mode=$4
-  ssh -o ConnectTimeout=1 "$user"@"$ip" "./practica_3.s -$mode $file"&>/dev/null
-}
-
-#Barra de progreso, hay que crear index como una variable en algun lugar y no modificarla
-updateProgressBar() {
-    local animation=( '>' '=' '=' '=' '=' '=' '=' '=' )
-    local msg="$1"
-    printf "\r\033[1;34m[%s%s%s%s%s%s%s%s]\033[0m %s" "${animation[index]}" "${animation[(index + 7) % 8]}" "${animation[(index + 6) % 8]}" "${animation[(index + 5) % 8]}" "${animation[(index + 4) % 8]}" "${animation[(index + 3) % 8]}" "${animation[(index + 2) % 8]}" "${animation[(index + 1) % 8]}" "$msg"
-    ((index = (index + 1) % 8))
+  ssh -o ConnectTimeout=$time "$user"@"$ip" "./practica_3.s -$mode $file"&>/dev/null
 }
 
 executeScript() {
@@ -107,9 +111,14 @@ executeScript() {
   OLD_IFS=$IFS
   IFS=';'
   for componente in $cadena; do
-    scpUpload "$componente" "$file" "$user"
-    if [ $? -eq 1 ]; then
-      remoteExecute "$componente" "$file" "$user" "$mode"
+    local status=$(ipCheck $componente)
+    if [[ $status == "true" ]]; then
+      scpUpload "$componente" "$file" "$user"
+      if [ $? -eq 1 ]; then
+        remoteExecute "$componente" "$file" "$user" "$mode"
+      fi
+    else
+      echo "La linea no tiene formato de ip: $componente"
     fi
   done
   IFS=$OLD_IFS
@@ -117,17 +126,19 @@ executeScript() {
 
 main() {
   local file=$1
-  local ipList=$(leerFicheroMaquinas "ficheroTest.txt")
-  if [[ $mode == "Append" ]]; then
-    local status=$(comprobarFichero "$file")
-    if [[ $status == "true" ]]; then
+  local machines=$2
+  local status=$(comprobarFichero "$file")
+  local status2=$(comprobarFichero "$machines")
+  if [[ $status == "true" && $status2 == "true" ]]; then
+    local ipList=$(leerFicheroMaquinas "$machines")
+    if [[ $mode == "Append" ]]; then
       executeScript "$ipList" "$file" "as" "s"
     else
-      error "El fichero especificado no existe"
+      executeScript "$ipList" "$file" "as" "a"
     fi
   else
-    executeScript "$ipList" "$file" "as" "a"
+    echo "Uno de los 2 ficheros no fue especificado o no existe!"
   fi
 }
 
-main $1
+main "$1" "$2"
