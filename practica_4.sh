@@ -104,6 +104,7 @@ remoteExecute() {
   echo "Permisos adquiridos"
   ssh -o ConnectTimeout=$time "$user"@"$ip" "sudo /tmp/practica_3.sh -$mode $file"&>/dev/null
   echo "ssh -o ConnectTimeout=$time $user@$ip sudo /tmp/practica_3.sh -$mode $file&>/dev/null"
+
 }
 
 executeScript() {
@@ -119,7 +120,7 @@ executeScript() {
       scpUpload "$componente" "practica_3.sh" "$user"
       scpUpload "$componente" "$file" "$user"
       echo "$?"
-      if [ $? -eq 1 ]; then
+      if [ $? -eq 0 ]; then
         echo "añadiendo usuarios"
         remoteExecute "$componente" "$file" "$user" "$mode"
       fi
