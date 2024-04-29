@@ -86,7 +86,7 @@ scpUpload() {
   local ip=$1
   local file=$2
   local user=$3
-  scp -o ConnectTimeout=$time "$file" "$user"@"$ip":/tmp/"$file" &>/dev/null
+  scp -o ConnectTimeout=$time "$file" "$user"@"$ip":/tmp/ &>/dev/null
   if [[ $? -eq 0 ]]; then
     echo "Fichero $file subido con exito a la maquina $ip" 
   else
