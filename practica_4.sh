@@ -100,11 +100,10 @@ remoteExecute() {
   local file=$2
   local user=$3
   local mode=$4
-  ssh -o ConnectTimeout=$time "$user"@"$ip" "chmod +x /tmp/practica_3.sh"&>/dev/null
+  ssh -o ConnectTimeout=$time "$user"@"$ip" "sudo chmod +x /tmp/practica_3.sh"&>/dev/null
   echo "Permisos adquiridos"
   ssh -o ConnectTimeout=$time "$user"@"$ip" "sudo /tmp/practica_3.sh -$mode $file"&>/dev/null
   echo "ssh -o ConnectTimeout=$time $user@$ip sudo /tmp/practica_3.sh -$mode $file&>/dev/null"
-  ssh "$user"@"$ip" "touch pwned"
 }
 
 executeScript() {
@@ -139,9 +138,9 @@ main() {
   if [[ $status == "true" && $status2 == "true" ]]; then
     local ipList=$(leerFicheroMaquinas "$machines")
     if [[ $mode == "Append" ]]; then
-      executeScript "$ipList" "$file" "as" "s"
-    else
       executeScript "$ipList" "$file" "as" "a"
+    else
+      executeScript "$ipList" "$file" "as" "s"
     fi
   else
     echo "Uno de los 2 ficheros no fue especificado o no existe!"
