@@ -100,7 +100,8 @@ remoteExecute() {
   local file=$2
   local user=$3
   local mode=$4
-  ssh -o ConnectTimeout=$time "$user"@"$ip" "./practica_3.s -$mode $file"&>/dev/null
+  ssh -o ConnectTimeout=$time "$user"@"$ip" "chmod +x /tmp/practica_3.sh"&>/dev/null
+  ssh -o ConnectTimeout=$time "$user"@"$ip" "/tmp/practica_3.sh -$mode $file"&>/dev/null
 }
 
 executeScript() {
