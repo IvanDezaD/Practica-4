@@ -40,12 +40,12 @@ leerFicheroMaquinas() {
 while getopts ":ash" opt; do
   case $opt in
   a)
-    mode="Delete"
-    info "Borrando los usuarios"
-    ;;
-  s)
     mode="Append"
     info "Añadiendo a los usuarios"
+    ;;
+  s)
+    mode="Delete"
+    info "Eliminando a los usuarios"
     ;;
   h)
     help
@@ -101,7 +101,9 @@ remoteExecute() {
   local user=$3
   local mode=$4
   ssh -o ConnectTimeout=$time "$user"@"$ip" "chmod +x /tmp/practica_3.sh"&>/dev/null
-  ssh -o ConnectTimeout=$time "$user"@"$ip" "/tmp/practica_3.sh -$mode $file"&>/dev/null
+  echo "Permisos adquiridos"
+  ssh -o ConnectTimeout=$time "$user"@"$ip" "sudo /tmp/practica_3.sh -$mode $file"&>/dev/null
+  echo "ssh -o ConnectTimeout=$time $user@$ip sudo /tmp/practica_3.sh -$mode $file&>/dev/null"
 }
 
 executeScript() {
