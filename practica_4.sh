@@ -116,8 +116,8 @@ executeScript() {
   for componente in $cadena; do
     local status=$(ipCheck $componente)
     if [[ $status == "true" ]]; then
-      scpUpload "$componente" "$file" "$user"
       scpUpload "$componente" "practica_3.sh" "$user"
+      scpUpload "$componente" "$file" "$user"
       if [ $? -eq 1 ]; then
         echo "añadiendo usuarios"
         remoteExecute "$componente" "$file" "$user" "$mode"
