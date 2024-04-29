@@ -101,7 +101,7 @@ remoteExecute() {
   local user=$3
   local mode=$4
   ssh -o ConnectTimeout=$time "$user"@"$ip" "sudo chmod +x /tmp/practica_3.sh"&>/dev/null
-  echo "Permisos adquiridos"
+  sleep 1
   ssh -o ConnectTimeout=$time "$user"@"$ip" "sudo /tmp/practica_3.sh -$mode $file"&>/dev/null
   echo "ssh -o ConnectTimeout=$time $user@$ip sudo /tmp/practica_3.sh -$mode $file&>/dev/null"
 }
